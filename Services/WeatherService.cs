@@ -7,29 +7,20 @@ namespace SrilogGlobalErrorLogging.Services.WeatherService
 {
     public class WeatherService : IWeatherService
     {
+        private readonly ILogger<WeatherService> _logger;
+
         private static readonly string[] Summaries = new[] {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
 
-        public WeatherService()
+        public WeatherService(ILogger<WeatherService> logger)
         {
-        }
-
-        public WeatherForecast AddWeather(string newWeather)
-        {
-            throw new NotImplementedException();
-        }
-
-        public WeatherForecast DeleteWeather(int id)
-        {
-            throw new NotImplementedException();
+            _logger = logger;
         }
 
         public WeatherForecast[] GetAllWeather()
         {
-            throw new NotImplementedException();
-
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -45,9 +36,22 @@ namespace SrilogGlobalErrorLogging.Services.WeatherService
             return Summaries[id];
         }
 
-        public WeatherForecast UpdateWeather(string updatedWeather)
+        public void ThrowError()
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogDebug($"This is a LogDebug {ex}");
+                _logger.LogInformation($"This is a LogInfor {ex}mation");
+                _logger.LogWarning($"This is a LogWarni {ex}ng");
+                _logger.LogError($"This is a LogError {ex}");
+                _logger.LogCritical($"This is a LogCriti {ex}cal");
+
+                throw;
+            }
         }
     }
 }

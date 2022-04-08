@@ -17,15 +17,21 @@ namespace SrilogGlobalErrorLogging.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public IActionResult Get()
         {
-            return _WeatherService.GetAllWeather();
+            return Ok(_WeatherService.GetAllWeather());
         }
 
         [HttpGet("{id}")]
-        public string GetById(int id)
+        public IActionResult GetById(int id)
         {
-            return _WeatherService.GetWeatherById(id);
+            return Ok(_WeatherService.GetWeatherById(id));
+        }
+
+        [HttpGet("ThrowErr")]
+        public void ThrowError()
+        {
+            _WeatherService.ThrowError();
         }
     }
 }
